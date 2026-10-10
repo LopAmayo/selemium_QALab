@@ -1,9 +1,6 @@
 package com.nttdata.steps;
 
-import com.nttdata.core.DriverManager;
-import com.nttdata.page.InventoryPage;
 import com.nttdata.page.LoginPage;
-import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,51 +8,48 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-import static com.nttdata.core.DriverManager.*;
-
+import static com.nttdata.core.DriverManager.esperaImplicita;
 
 public class LoginSteps {
+    private WebDriver webDriver;
 
-    private WebDriver driver;
-
-    //constructor
-    public LoginSteps(WebDriver driver){
-        this.driver = driver;
+    public LoginSteps (WebDriver driver){
+        this.webDriver = driver;
     }
-    /**
-     * Escribir el usuario
-     * @param user el usuario
-     */
+
+    public void viewLogin (){
+        this.webDriver.findElement(LoginPage.buttonLogin).click();
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(4));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.tittleLogin));
+    }
+
     public void typeUser(String user){
-        WebElement userInputElement = driver.findElement(LoginPage.userInput);
+        WebElement userInputElement = webDriver.findElement(LoginPage.inputEmail);
+        userInputElement.clear();
         userInputElement.sendKeys(user);
-        //Espera implicita
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(444));
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
-        //Espera explicita
-        wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.loginButton));
     }
 
-    /**
-     * Escribir el password
-     * @param password el password del usuario
-     */
     public void typePassword(String password){
-        this.driver.findElement(LoginPage.passInput).sendKeys(password);
+        WebElement passInputElement = webDriver.findElement(LoginPage.inputPassword);
+        passInputElement.clear();
+        passInputElement.sendKeys(password);
     }
 
-    /**
-     * Hacer click en el botón login
-     */
-    public void login(){
-        this.driver.findElement(LoginPage.loginButton).click();
+    public void buttonLogin (){
+        this.webDriver.findElement(LoginPage.buttonSubmit).click();
     }
 
-
-    public void ingresoUsuarioYClave(String user, String password) {
+    public void login (String user, String password){
+        viewLogin ();
         typeUser(user);
         typePassword(password);
         esperaImplicita();
-        login();
+        buttonLogin ();
+    }
+
+    public String loginIncorret (){
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(4));
+        String text = wait.until(ExpectedConditions.visibilityOfElementLocated(LoginPage.alertNotLogin)).getText();
+        return text;
     }
 }

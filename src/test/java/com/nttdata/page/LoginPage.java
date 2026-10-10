@@ -1,14 +1,13 @@
 package com.nttdata.page;
 
-import com.nttdata.core.DriverManager;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
 public class LoginPage {
-
-    //Localizadores de elementos
-    public static By userInput = By.id("user-name");
-    public static By passInput = By.id("password");
-    public static By loginButton = By.id("login-button");
+    public static By buttonLogin = By.xpath("//div[@class='user-info']/a");
+    public static By tittleLogin = By.xpath("//header[@class = 'page-header']/h1");
+    public static By inputEmail = By.id("field-email");
+    public static By inputPassword = By.id("field-password");
+    public static By buttonSubmit = By.id("submit-login");
+    public static By alertNotLogin = By.xpath("//li[@class = 'alert alert-danger']");
 
 }
